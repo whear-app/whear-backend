@@ -18,7 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\WhearApp.Application\WhearApp.Application.csproj" />
+      <ProjectReference Include="..\WhearApp.Application\WhearApp.Application.csproj" />
       <ProjectReference Include="..\WhearApp.Infrastructure\WhearApp.Infrastructure.csproj" />
     </ItemGroup>
 

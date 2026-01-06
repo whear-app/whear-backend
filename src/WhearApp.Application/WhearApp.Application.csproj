@@ -7,7 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\src\WhearApp.Core\WhearApp.Core.csproj" />
     </ItemGroup>
 
 </Project>
