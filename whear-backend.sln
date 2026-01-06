@@ -10,6 +10,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		compose.yaml = compose.yaml
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildingBlocks", "BuildingBlocks", "{984E6015-DF9B-41C8-94EF-B5B4881537B0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhearApp.BuildingBlocks.SharedKernel", "src\BuildingBlocks\WhearApp.BuildingBlocks.SharedKernel\WhearApp.BuildingBlocks.SharedKernel.csproj", "{D232347B-0D1D-47D0-95E8-B4A2D37706A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhearApp.BuildingBlocks.Utils", "src\BuildingBlocks\WhearApp.BuildingBlocks.Utils\WhearApp.BuildingBlocks.Utils.csproj", "{609855EE-1B35-4AE2-B75B-0AE75D4702DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,5 +29,17 @@ Global
 		{F69A08C1-7927-4670-AFE3-0ED5660002EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F69A08C1-7927-4670-AFE3-0ED5660002EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F69A08C1-7927-4670-AFE3-0ED5660002EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D232347B-0D1D-47D0-95E8-B4A2D37706A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D232347B-0D1D-47D0-95E8-B4A2D37706A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D232347B-0D1D-47D0-95E8-B4A2D37706A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D232347B-0D1D-47D0-95E8-B4A2D37706A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{609855EE-1B35-4AE2-B75B-0AE75D4702DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{609855EE-1B35-4AE2-B75B-0AE75D4702DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{609855EE-1B35-4AE2-B75B-0AE75D4702DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{609855EE-1B35-4AE2-B75B-0AE75D4702DC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D232347B-0D1D-47D0-95E8-B4A2D37706A3} = {984E6015-DF9B-41C8-94EF-B5B4881537B0}
+		{609855EE-1B35-4AE2-B75B-0AE75D4702DC} = {984E6015-DF9B-41C8-94EF-B5B4881537B0}
 	EndGlobalSection
 EndGlobal
