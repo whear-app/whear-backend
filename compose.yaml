@@ -1,0 +1,7 @@
+﻿services:
+  whearapp.webapi:
+    image: whearapp.webapi
+    build:
+      context: .
+      dockerfile: src/WhearApp.WebApi/Dockerfile
+

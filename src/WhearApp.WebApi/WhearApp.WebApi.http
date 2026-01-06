@@ -1,0 +1,6 @@
+@WhearApp.WebApi_HostAddress = http://localhost:5157
+
+GET {{WhearApp.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
