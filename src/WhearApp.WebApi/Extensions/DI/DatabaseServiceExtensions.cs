@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Npgsql;
-using WhearApp.Application.Identity.Services;
+using WhearApp.Application.Identity.Abstractions;
 using WhearApp.Core.Identity;
 using WhearApp.Infrastructure.Database;
 using WhearApp.Infrastructure.Identity.Security;

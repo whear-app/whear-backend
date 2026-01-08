@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using WhearApp.Application.Common;
 using WhearApp.Application.Identity;
-using WhearApp.Application.Identity.Services;
+using WhearApp.Application.Identity.Abstractions;
 using WhearApp.Core.Identity;
 using WhearApp.Infrastructure.Database;
 using WhearApp.Infrastructure.Identity.Security;
@@ -17,9 +17,11 @@ public class AuthService : IAuthService
     private readonly IJwtService _jwtService;
     private readonly UserManager<UserEntity> _userManager;
     public AuthService(
+        ApplicationDbContext dbContext,
         UserManager<UserEntity> userManager,
         IJwtService jwtService)
     {
+        _dbContext = dbContext;
         _userManager = userManager;
         _jwtService = jwtService;
     }
@@ -112,7 +114,6 @@ public class AuthService : IAuthService
 
         var refreshToken = new RefreshToken
         {
-            Id = Guid.NewGuid(),
             UserId = user.Id,
             Token = refreshTokenValue,
             CreatedAt = DateTime.UtcNow,

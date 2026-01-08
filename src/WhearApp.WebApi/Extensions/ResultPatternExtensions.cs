@@ -63,7 +63,7 @@ public static class ResultPatternExtensions
             Extensions =
             {
                 ["traceId"] = Activity.Current?.Id ?? Guid.NewGuid().ToString()
-            }
+            },
         };
         
         if (error.Metadata.Count != 0)

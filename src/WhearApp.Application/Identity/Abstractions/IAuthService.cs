@@ -1,6 +1,6 @@
 ﻿using FluentResults;
 
-namespace WhearApp.Application.Identity.Services;
+namespace WhearApp.Application.Identity.Abstractions;
 
 public interface IAuthService
 {

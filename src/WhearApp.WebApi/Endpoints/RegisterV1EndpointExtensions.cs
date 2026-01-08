@@ -1,4 +1,5 @@
-﻿using WhearApp.WebApi.Endpoints.Auth;
+﻿using WhearApp.WebApi.Endpoints.Account;
+using WhearApp.WebApi.Endpoints.Auth;
 using WhearApp.WebApi.Endpoints.System;
 
 namespace WhearApp.WebApi.Endpoints;
@@ -14,6 +15,10 @@ public static class RegisterV1EndpointExtensions
         endpoints.MapGroup("/auth")
             .WithTags("Auth")
             .MapAuthEndpoints();
+        
+        endpoints.MapGroup("/account")
+            .WithTags("Account")
+            .MapAccountEndpoints();
 
     }
 }

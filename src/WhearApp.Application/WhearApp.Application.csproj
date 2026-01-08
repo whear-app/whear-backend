@@ -7,7 +7,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="FluentResults" Version="4.0.0" />
+      <PackageReference Include="FluentValidation" Version="12.1.1" />
+      <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
+      <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="9.0.11" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\WhearApp.Core\WhearApp.Core.csproj" />
     </ItemGroup>
 
 </Project>

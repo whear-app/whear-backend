@@ -1,5 +1,6 @@
 using Scalar.AspNetCore;
-using WhearApp.Application.Identity.Services;
+using WhearApp.Application.Identity.Abstractions;
+using WhearApp.Infrastructure.Identity.Security;
 using WhearApp.Infrastructure.Identity.Services;
 using WhearApp.WebApi.Endpoints;
 using WhearApp.WebApi.Extensions.DI;
@@ -10,8 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.ConfigureOpenApi();
 builder.Services.AddDatabaseServices(builder.Configuration, builder.Environment);
 builder.Services.AddIdentityServices(builder.Configuration);
+builder.Services.AddBackgroundJobServices();
 builder.Services.AddScoped<IAuthService, AuthService>();
-
 var app = builder.Build();
 app.UseGlobalExceptionHandler();
 app.UseStatusCodePages();

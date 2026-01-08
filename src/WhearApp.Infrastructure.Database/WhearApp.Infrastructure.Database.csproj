@@ -23,5 +23,9 @@
     <ItemGroup>
       <ProjectReference Include="..\WhearApp.Core\WhearApp.Core.csproj" />
     </ItemGroup>
+    
+    <ItemGroup>
+      <Folder Include="Converters\" />
+    </ItemGroup>
 
 </Project>
