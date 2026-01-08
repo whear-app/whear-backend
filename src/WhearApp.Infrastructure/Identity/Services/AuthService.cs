@@ -18,8 +18,7 @@ public class AuthService : IAuthService
     private readonly UserManager<UserEntity> _userManager;
     public AuthService(
         UserManager<UserEntity> userManager,
-        IJwtService jwtService,
-        IDistributedCache cache)
+        IJwtService jwtService)
     {
         _userManager = userManager;
         _jwtService = jwtService;
