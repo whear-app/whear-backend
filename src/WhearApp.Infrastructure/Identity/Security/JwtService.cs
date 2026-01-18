@@ -3,15 +3,9 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using WhearApp.Application.Identity.Abstractions;
 
 namespace WhearApp.Infrastructure.Identity.Security;
-
-public interface IJwtService
-{
-    string GenerateToken(string userId, string username, List<string> roles);
-    string GenerateRefreshToken();
-    ClaimsPrincipal? GetPrincipalFromExpiredToken(string token);
-}
 
 public class JwtService : IJwtService
 {

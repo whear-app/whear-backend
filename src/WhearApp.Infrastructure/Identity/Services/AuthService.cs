@@ -6,7 +6,6 @@ using WhearApp.Application.Identity;
 using WhearApp.Application.Identity.Abstractions;
 using WhearApp.Core.Identity;
 using WhearApp.Infrastructure.Database;
-using WhearApp.Infrastructure.Identity.Security;
 
 namespace WhearApp.Infrastructure.Identity.Services;
 

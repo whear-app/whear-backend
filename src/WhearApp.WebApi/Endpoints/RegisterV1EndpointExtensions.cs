@@ -15,6 +15,10 @@ public static class RegisterV1EndpointExtensions
         endpoints.MapGroup("/account")
             .WithTags("Account")
             .MapAccountEndpoints();
+        
+        endpoints.MapGroup("/oauth2")
+            .WithTags("OAuth2 Providers")
+            .MapOAuth2ProvidersEndpoints();
 
     }
 }
