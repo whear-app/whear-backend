@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0.Solution Items", "0.Solution Items", "{92D9C202-C047-4636-ACAF-43DCE54C425E}"
 	ProjectSection(SolutionItems) = preProject
 		compose.yaml = compose.yaml
+		docker-build-entrypoint.sh = docker-build-entrypoint.sh
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0.BuildingBlocks", "0.BuildingBlocks", "{984E6015-DF9B-41C8-94EF-B5B4881537B0}"

@@ -1,8 +1,9 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
-USER $APP_UID
 WORKDIR /app
 EXPOSE 8080
-EXPOSE 8081
+
+ENV ASPNETCORE_ENVIRONMENT=Development
+#ENV ASPNETCORE_URLS=http://+:$PORT
 
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
@@ -27,4 +28,7 @@ RUN dotnet publish "./WhearApp.WebApi.csproj" -c $BUILD_CONFIGURATION -o /app/pu
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "WhearApp.WebApi.dll"]
+COPY docker-build-entrypoint.sh /
+COPY --chmod=755 docker-build-entrypoint.sh /
+USER $APP_UID
+ENTRYPOINT ["/docker-build-entrypoint.sh"]

@@ -1,4 +1,5 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.OpenApi.Models;
 using WhearApp.Application.Common;
 
 namespace WhearApp.WebApi.Extensions.DI;
@@ -29,6 +30,20 @@ public static class ApiVersioningExtensions
                         Email = "thtntrungnam@gmail.com"
                     }
                 };
+
+                // Add Security Scheme
+                document.Components ??= new OpenApiComponents();
+                document.Components.SecuritySchemes = new Dictionary<string, OpenApiSecurityScheme>
+                {
+                    ["Bearer"] = new OpenApiSecurityScheme
+                    {
+                        Type = SecuritySchemeType.Http,
+                        Scheme = "bearer",
+                        BearerFormat = "JWT",
+                        Description = "Enter JWT Bearer token in the format: Bearer {your token}"
+                    }
+                };
+
                 return Task.CompletedTask;
             });
             
@@ -42,18 +57,13 @@ public static class ApiVersioningExtensions
                 {
                     var dataType = type.GetGenericArguments()[0];
                     
-                    // Custom schema ID for Orval to recognize as generic
-                    // Format: ApiResponse_T where T is the actual type name
                     var schemaId = $"ApiResponseOf{dataType.Name}";
                     
-                    // Ensure data property has correct reference
                     if (schema.Properties.TryGetValue("data", out var dataProperty))
                     {
-                        // Add description for better documentation
                         dataProperty.Description = $"The response data of type {dataType.Name}";
                     }
 
-                    // Mark as nullable where appropriate
                     if (schema.Properties.TryGetValue("data", out var arg1Property))
                     {
                         arg1Property.Nullable = true;
@@ -76,9 +86,35 @@ public static class ApiVersioningExtensions
                 return Task.CompletedTask;
             });
 
-            // Add operation transformers for better documentation
+            // Add operation transformers for security and documentation
             options.AddOperationTransformer((operation, context, cancellationToken) =>
             {
+                // Add security requirement for endpoints with [Authorize]
+                var metadata = context.Description.ActionDescriptor.EndpointMetadata;
+                var hasAuthorize = metadata.Any(m => 
+                    m.GetType().Name == "AuthorizeAttribute" || 
+                    m.GetType().FullName?.Contains("Microsoft.AspNetCore.Authorization") == true);
+
+                if (hasAuthorize)
+                {
+                    operation.Security = new List<OpenApiSecurityRequirement>
+                    {
+                        new OpenApiSecurityRequirement
+                        {
+                            [
+                                new OpenApiSecurityScheme
+                                {
+                                    Reference = new OpenApiReference
+                                    {
+                                        Type = ReferenceType.SecurityScheme,
+                                        Id = "Bearer"
+                                    }
+                                }
+                            ] = Array.Empty<string>()
+                        }
+                    };
+                }
+
                 // Add common response headers
                 foreach (var response in operation.Responses.Values)
                 {

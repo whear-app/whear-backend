@@ -1,7 +1,6 @@
 ﻿using FluentResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Distributed;
 using WhearApp.Application.Common;
 using WhearApp.Application.Identity;
 using WhearApp.Application.Identity.Abstractions;
@@ -243,8 +242,6 @@ public class AuthService : IAuthService
             user.EmailConfirmed,
             user.PhoneNumber,
             user.TwoFactorEnabled);
-        
-        var serializedUserInfo = System.Text.Json.JsonSerializer.Serialize(userInfo);
         
         return Result.Ok(userInfo);
     }

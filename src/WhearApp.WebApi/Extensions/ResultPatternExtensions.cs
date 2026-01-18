@@ -10,7 +10,7 @@ public static class ResultPatternExtensions
     /// <summary>
     /// Gets the first success message or returns the default message if no successes exist
     /// </summary>
-    public static string GetSuccessMessage(this ResultBase result, string defaultMessage)
+    private static string GetSuccessMessage(this ResultBase result, string defaultMessage)
     {
         return result.Successes.Count > 0 
             ? result.Successes[0].Message 
@@ -30,7 +30,7 @@ public static class ResultPatternExtensions
     public static IResult ToHttpResult<T>(this Result<T> result)
     {
         if (!result.IsSuccess) return result.Errors[0].ToProblemDetails();
-        var firstSuccess = GetSuccessMessage(result, "completed");
+        var firstSuccess = result.GetSuccessMessage("completed");
         return Results.Ok(ApiResponse<T>.Ok(result.Value, firstSuccess));
     }
 

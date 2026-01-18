@@ -24,6 +24,7 @@ public static class DatabaseServiceExtensions
 
         // Register Identity application services
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IAccountService, AccountService>();
 
         services.AddIdentity<UserEntity, RoleEntity>(options =>
             {
@@ -71,6 +72,7 @@ public static class DatabaseServiceExtensions
                     }
                 };
             });
+        services.AddAuthorization();
     }
     
     public static void AddDatabaseServices(

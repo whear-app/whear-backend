@@ -17,7 +17,7 @@ public static partial class AccountEndpoints
             .WithApiMetadata(
                 "Change password",
                 "Changes the password for the authenticated user.")
-            .Produces<ApiResponse>()
+            .Produces(StatusCodes.Status204NoContent)
             .Produces<ProblemDetails>(StatusCodes.Status400BadRequest);
 
         group.MapPost("/forgot-password", ForgotPassword)

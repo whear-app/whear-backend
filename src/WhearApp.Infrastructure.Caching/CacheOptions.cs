@@ -8,6 +8,7 @@ public enum CacheType
 
 public class CacheOptions
 {
+    public const string SectionName = "Cache";
     public CacheType CacheType { get; set; } = CacheType.Redis;
     public string? ConnectionString { get; set; }
     public int DefaultExpirationMinutes { get; set; } = 60;

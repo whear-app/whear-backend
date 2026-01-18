@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Caching.Distributed;
 using StackExchange.Redis;
 
-namespace A2I.Infrastructure.Caching.Providers;
+namespace WhearApp.Infrastructure.Caching.Providers;
 
 public interface IRedisDistributedCache
 {

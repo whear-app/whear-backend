@@ -24,6 +24,7 @@ public class GlobalExceptionMiddleware(
         }
         catch (Exception ex)
         {
+            _logger.LogError(ex, ex.Message);
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = 500;
             var options = new JsonSerializerOptions

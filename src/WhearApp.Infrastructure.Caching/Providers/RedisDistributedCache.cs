@@ -1,8 +1,7 @@
 using Microsoft.Extensions.Caching.Distributed;
 using StackExchange.Redis;
-using WhearApp.Infrastructure.Caching;
 
-namespace A2I.Infrastructure.Caching.Providers;
+namespace WhearApp.Infrastructure.Caching.Providers;
 
 public sealed class RedisDistributedCache : IRedisDistributedCache, IAsyncDisposable
 {

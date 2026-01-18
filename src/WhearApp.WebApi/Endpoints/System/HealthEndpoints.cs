@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
 using WhearApp.Infrastructure.Database;
 using WhearApp.WebApi.Extensions;
 
@@ -45,12 +46,14 @@ public static class HealthEndpoints
     private static async Task<IResult> GetDetailedHealth(
         ApplicationDbContext dbContext,
         IConfiguration configuration,
+        IConnectionMultiplexer redis,
         IHostEnvironment environment)
     {
         var checks = new Dictionary<string, ComponentHealth>
         {
             // Check database
             ["database"] = await CheckDatabaseAsync(dbContext),
+            ["cache"] = await CheckCacheAsync(redis),
         };
 
         // Overall status
@@ -104,7 +107,44 @@ public static class HealthEndpoints
             };
         }
     }
+    
+    private static async Task<ComponentHealth> CheckCacheAsync(IConnectionMultiplexer redis)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            var db = redis.GetDatabase();
+            var latency = await db.PingAsync();
+            stopwatch.Stop();
 
+            var endpoint = redis.GetEndPoints().FirstOrDefault();
+            var server = endpoint is not null ? redis.GetServer(endpoint) : null;
+
+            return new ComponentHealth
+            {
+                Status = "healthy",
+                ResponseTime = stopwatch.ElapsedMilliseconds,
+                Details = new Dictionary<string, object>
+                {
+                    ["provider"] = "Redis",
+                    ["latencyMs"] = latency.TotalMilliseconds,
+                    ["endpoint"] = endpoint?.ToString() ?? "unknown",
+                    ["connected"] = redis.IsConnected,
+                    ["serverVersion"] = server?.Version.ToString() ?? "unknown"
+                }
+            };
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return new ComponentHealth
+            {
+                Status = "unhealthy",
+                ResponseTime = stopwatch.ElapsedMilliseconds,
+                Error = ex.Message
+            };
+        }
+    }
 }
 
 // ==================== RESPONSE MODELS ====================
