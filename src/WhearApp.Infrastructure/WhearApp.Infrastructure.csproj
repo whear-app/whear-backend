@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\WhearApp.Application\WhearApp.Application.csproj" />
+      <ProjectReference Include="..\WhearApp.Infrastructure.Caching\WhearApp.Infrastructure.Caching.csproj" />
+      <ProjectReference Include="..\WhearApp.Infrastructure.Database\WhearApp.Infrastructure.Database.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Google.Apis.Auth" Version="1.73.0" />
+      <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.15.0" />
+      <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.15.0" />
+      <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="9.0.10" />
+    </ItemGroup>
+
+</Project>

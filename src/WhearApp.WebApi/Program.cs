@@ -1,41 +1,89 @@
+using Microsoft.AspNetCore.HttpOverrides;
+using Scalar.AspNetCore;
+using WhearApp.Infrastructure.Caching;
+using WhearApp.WebApi.Endpoints;
+using WhearApp.WebApi.Endpoints.System;
+using WhearApp.WebApi.Extensions.DI;
+using WhearApp.WebApi.Middlewares;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | 
+                               ForwardedHeaders.XForwardedProto;
+    options.KnownNetworks.Clear();
+    options.KnownProxies.Clear();
+});
+builder.Services.ConfigureOpenApi();
+builder.Services.AddCacheService(options =>
+{
+    var cacheSection = builder.Configuration.GetSection(CacheOptions.SectionName);
+    cacheSection.Bind(options);
+});
+builder.Services.AddDatabaseServices(builder.Configuration, builder.Environment);
+builder.Services.AddIdentityServices(builder.Configuration);
+builder.Services.AddBackgroundJobServices();
+
+
+builder.Services.AddCors(options =>
+{
+    // Allow all origins, methods, and headers for development
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin();
+        policy.AllowAnyMethod();
+        policy.AllowAnyHeader();
+    });
+});
 
 var app = builder.Build();
-
+app.UseCors("AllowAll");
+app.UseForwardedHeaders();
+app.UseGlobalExceptionHandler();
+app.UseStatusCodePages();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference("/docs", options =>
+    {
+        options.Title = "WhearApp API";
+        options.Theme = ScalarTheme.Purple;
+        
+        // Configure authentication
+        options.AddPreferredSecuritySchemes("Bearer")
+            .AddHttpAuthentication("Bearer", auth =>
+            {
+                auth.Token = "";
+            });
+        var addresses = app.Configuration["ASPNETCORE_URLS"] 
+                        ?? app.Configuration["urls"] 
+                        ?? "http://localhost:5000";
+        var serverUrls = addresses.Split(';');
+        foreach (var url in serverUrls)
+        {
+            options.AddServer(new ScalarServer(url.Trim(), "Local Development"));
+        }
+        options.AddServer("https://whear-server-72cfd82d57fc.herokuapp.com", "Staging");
+    });
 }
 
 app.UseHttpsRedirection();
+app.UseAuthentication();
+app.UseAuthorization();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+app.MapGet("/", () => "Hello World!")
+    .ExcludeFromDescription()
+    .ExcludeFromApiReference();
 
-app.MapGet("/weatherforecast", () =>
-    {
-        var forecast = Enumerable.Range(1, 5).Select(index =>
-                new WeatherForecast
-                (
-                    DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                    Random.Shared.Next(-20, 55),
-                    summaries[Random.Shared.Next(summaries.Length)]
-                ))
-            .ToArray();
-        return forecast;
-    })
-    .WithName("GetWeatherForecast");
+app.MapGroup("/health")
+    .WithTags("System")
+    .MapHealthEndpoints();
+
+app.MapGroup("/api/v1")
+    .WithOpenApi()
+    .MapV1Endpoints();
 
 app.Run();
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
