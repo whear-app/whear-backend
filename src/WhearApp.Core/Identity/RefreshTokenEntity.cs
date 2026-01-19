@@ -3,7 +3,7 @@ using WhearApp.BuildingBlocks.SharedKernel.Common;
 
 namespace WhearApp.Core.Identity;
 
-public class RefreshToken : IEntityBase<Guid>
+public class RefreshTokenEntity : IEntityBase<Guid>
 {
     public Guid Id { get; set; }
     public Guid UserId { get; set; }

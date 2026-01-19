@@ -4,11 +4,16 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Npgsql;
+using WhearApp.Application.Common;
 using WhearApp.Application.Identity.Abstractions;
+using WhearApp.Application.Identity.Repositories;
+using WhearApp.Application.Identity.Services;
 using WhearApp.Core.Identity;
 using WhearApp.Infrastructure.Database;
+using WhearApp.Infrastructure.Identity.Repositories;
 using WhearApp.Infrastructure.Identity.Security;
 using WhearApp.Infrastructure.Identity.Services;
+using WhearApp.Infrastructure.Persistence;
 
 namespace WhearApp.WebApi.Extensions.DI;
 
@@ -25,6 +30,10 @@ public static class DatabaseServiceExtensions
         // Register Identity application services
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IAccountService, AccountService>();
+        services.AddHttpClient<GoogleAuthService>();
+        services.AddScoped<GoogleLoginService>();
+        services.AddScoped<IGoogleAuthService, GoogleAuthService>();
+
 
         services.AddIdentity<UserEntity, RoleEntity>(options =>
             {
@@ -105,6 +114,11 @@ public static class DatabaseServiceExtensions
             options.EnableSensitiveDataLogging(dbOptions.EnableSensitiveDataLogging);
             options.EnableDetailedErrors(dbOptions.EnableDetailedErrors);
         });
+        
+        services.AddScoped<IUnitOfWorkFactory, UnitOfWorkFactory>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IIdentityRepository, IdentityRepository>();
+        
     }
     
     private static string BuildConnectionString(DatabaseOptions dbOptions)

@@ -1,9 +1,6 @@
 using Microsoft.AspNetCore.HttpOverrides;
 using Scalar.AspNetCore;
-using WhearApp.Application.Identity;
-using WhearApp.Application.Identity.Abstractions;
 using WhearApp.Infrastructure.Caching;
-using WhearApp.Infrastructure.Identity.Services;
 using WhearApp.WebApi.Endpoints;
 using WhearApp.WebApi.Endpoints.System;
 using WhearApp.WebApi.Extensions.DI;
@@ -27,10 +24,6 @@ builder.Services.AddCacheService(options =>
 builder.Services.AddDatabaseServices(builder.Configuration, builder.Environment);
 builder.Services.AddIdentityServices(builder.Configuration);
 builder.Services.AddBackgroundJobServices();
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddHttpClient<GoogleLoginUseCase>();
-builder.Services.AddScoped<GoogleLoginUseCase>();
-builder.Services.AddScoped<IGoogleAuthService, GoogleAuthService>();
 
 
 builder.Services.AddCors(options =>

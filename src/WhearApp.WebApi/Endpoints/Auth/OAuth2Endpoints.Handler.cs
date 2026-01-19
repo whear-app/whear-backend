@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
-using WhearApp.Application.Identity;
+using WhearApp.Application.Identity.Services;
 
 namespace WhearApp.WebApi.Endpoints.Auth;
 
 public static partial class OAuth2Endpoints
 {
-    private static async Task<IResult> GoogleLogin([FromBody] GoogleLoginRequest request, [FromServices] GoogleLoginUseCase googleLoginUseCase, CancellationToken ct)
+    private static async Task<IResult> GoogleLogin([FromBody] GoogleLoginRequest request, [FromServices] GoogleLoginService googleLoginUseCase, CancellationToken ct)
     {
         if (string.IsNullOrWhiteSpace(request.AuthorizationCode) ||
             string.IsNullOrWhiteSpace(request.CodeVerifier))

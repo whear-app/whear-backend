@@ -10,7 +10,7 @@ namespace WhearApp.Infrastructure.Database;
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : 
     IdentityDbContext<UserEntity, RoleEntity, Guid>(options)
 {
-    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+    public DbSet<RefreshTokenEntity> RefreshTokens => Set<RefreshTokenEntity>();
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -52,7 +52,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             entity.ToTable("user_tokens");
         });
 
-        modelBuilder.Entity<RefreshToken>(entity =>
+        modelBuilder.Entity<RefreshTokenEntity>(entity =>
         {
             entity.ToTable("refresh_tokens");
             entity.HasKey(e => e.Id);

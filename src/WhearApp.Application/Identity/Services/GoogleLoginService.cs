@@ -3,7 +3,7 @@ using WhearApp.Application.Identity.Abstractions;
 using WhearApp.Application.Identity.Dto;
 using WhearApp.Core.Identity;
 
-namespace WhearApp.Application.Identity;
+namespace WhearApp.Application.Identity.Services;
 public class GoogleLoginRequest
 {
     public string AuthorizationCode { get; set; } = string.Empty;
@@ -19,40 +19,32 @@ public class AuthResponse
     public int ExpiresIn { get; set; }
 }
 
-public class GoogleLoginUseCase
+public class GoogleLoginService(
+    IGoogleAuthService googleAuthService,
+    IJwtService jwtService,
+    UserManager<UserEntity> userManager)
 {
-    private readonly IGoogleAuthService _googleAuthService;
-    private readonly IJwtService _jwtService;
-    private readonly UserManager<UserEntity> _userManager;
-
-    public GoogleLoginUseCase(IGoogleAuthService googleAuthService, IJwtService jwtService, UserManager<UserEntity> userManager)
-    {
-        _googleAuthService = googleAuthService;
-        _jwtService = jwtService;
-        _userManager = userManager;
-    }
-
     public async Task<AuthResponse> ExecuteAsync(
         GoogleLoginRequest request,
         CancellationToken ct = default)
     {
-        var tokenResponse = await _googleAuthService.ExchangeCodeAsync(
+        var tokenResponse = await googleAuthService.ExchangeCodeAsync(
             request.AuthorizationCode,
             request.CodeVerifier,
             ct);
         
-        var userInfo = await _googleAuthService.VerifyIdTokenAsync(
+        var userInfo = await googleAuthService.VerifyIdTokenAsync(
             tokenResponse.IdToken,
             ct);
         
         var user = await GetOrCreateUserAsync(userInfo, ct);
-        var roles = await _userManager.GetRolesAsync(user);
-        var accessToken = _jwtService.GenerateToken(
+        var roles = await userManager.GetRolesAsync(user);
+        var accessToken = jwtService.GenerateToken(
             user.Id.ToString(),
             user.UserName!,
             roles.ToList());
         
-        var refreshToken = _jwtService.GenerateRefreshToken();
+        var refreshToken = jwtService.GenerateRefreshToken();
         
         return new AuthResponse
         {
@@ -66,7 +58,7 @@ public class GoogleLoginUseCase
         GoogleUserInfo userInfo,
         CancellationToken ct)
     {
-        var user = await _userManager.FindByEmailAsync(userInfo.Email);
+        var user = await userManager.FindByEmailAsync(userInfo.Email);
         if (user != null)
             return user;
 
@@ -77,14 +69,14 @@ public class GoogleLoginUseCase
             EmailConfirmed = true
         };
 
-        var result = await _userManager.CreateAsync(user);
+        var result = await userManager.CreateAsync(user);
         if (!result.Succeeded)
         {
             var errors = result.Errors.ToDictionary(x => x.Code, x => x.Description);
             throw new Exception("Failed to create user: " + string.Join(", ", errors.Values));
         }
 
-        await _userManager.AddToRoleAsync(user, "User");
+        await userManager.AddToRoleAsync(user, "User");
 
         return user;
     }
