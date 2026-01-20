@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.HttpOverrides;
 using Scalar.AspNetCore;
+using WhearApp.Application.Common.Interfaces;
 using WhearApp.Infrastructure.Caching;
+using WhearApp.Infrastructure.Common;
+using WhearApp.Infrastructure.Common.Services;
 using WhearApp.WebApi.Endpoints;
 using WhearApp.WebApi.Endpoints.System;
 using WhearApp.WebApi.Extensions.DI;
@@ -25,6 +28,11 @@ builder.Services.AddDatabaseServices(builder.Configuration, builder.Environment)
 builder.Services.AddIdentityServices(builder.Configuration);
 builder.Services.AddBackgroundJobServices();
 
+builder.Services.Configure<EmailSettings>(
+    builder.Configuration.GetSection(EmailSettings.SectionName));
+
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IEmailTemplateService, EmailTemplateService>();
 
 builder.Services.AddCors(options =>
 {
