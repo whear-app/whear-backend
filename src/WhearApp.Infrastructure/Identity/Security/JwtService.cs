@@ -18,7 +18,7 @@ public class JwtService : IJwtService
         _keyService = keyService;
     }
 
-    public string GenerateToken(string userId, string username, List<string> roles)
+    public string GenerateToken(string userId, string username, List<string> roles, List<Claim>? customClaims = null)
     {
         var claims = new List<Claim>
         {
@@ -27,6 +27,12 @@ public class JwtService : IJwtService
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
         };
         claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
+        
+        // Add custom claims if provided
+        if (customClaims != null && customClaims.Count > 0)
+        {
+            claims.AddRange(customClaims);
+        }
 
         var privateKey = _keyService.GetCurrentPrivateKey();
         var credentials = new SigningCredentials(privateKey, SecurityAlgorithms.RsaSha256);

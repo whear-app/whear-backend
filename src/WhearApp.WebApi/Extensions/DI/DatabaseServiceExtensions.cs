@@ -64,6 +64,7 @@ public static class DatabaseServiceExtensions
             })
             .AddJwtBearer(options =>
             {
+                options.MapInboundClaims = false;
                 var jwtSettings = configuration.GetSection(JwtSettings.SectionName).Get<JwtSettings>();
                 options.TokenValidationParameters = new TokenValidationParameters
                 {

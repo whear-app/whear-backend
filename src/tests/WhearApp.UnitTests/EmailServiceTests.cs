@@ -92,8 +92,8 @@ public class EmailServiceTests
             To = "recipient@example.com",
             Subject = "Test",
             Body = "Body",
-            Cc = new List<string> { "cc1@example.com", "cc2@example.com" },
-            Bcc = new List<string> { "bcc@example.com" }
+            Cc = ["cc1@example.com", "cc2@example.com"],
+            Bcc = ["bcc@example.com"]
         };
 
         // Act
@@ -111,21 +111,21 @@ public class EmailServiceTests
         var options = Options.Create(_validSettings);
         var service = new EmailService(options, _loggerMock.Object);
         
-        var attachmentContent = System.Text.Encoding.UTF8.GetBytes("Test content");
+        var attachmentContent = "Test content"u8.ToArray();
         var message = new EmailMessage
         {
             To = "recipient@example.com",
             Subject = "Test",
             Body = "Body",
-            Attachments = new List<EmailAttachment>
-            {
+            Attachments =
+            [
                 new EmailAttachment
                 {
                     FileName = "test.txt",
                     Content = attachmentContent,
                     ContentType = "text/plain"
                 }
-            }
+            ]
         };
 
         // Act
